@@ -1,6 +1,5 @@
+//@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@400;600&family=Righteous&display=swap');
 
-
-.photo_box {
-    background: rgb(162,239,255);
-    background: linear-gradient(90deg, rgba(162,239,255,1) 0%, rgba(65,197,255,1) 100%);
-}
+@import "_variables";
+@import "_normalize";
+@import "_main";

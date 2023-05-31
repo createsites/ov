@@ -2,12 +2,6 @@ module.exports = {
   config: {
     port: 9050,
   },
-  plugins: {
-    typograpy: true,
-    forms: true,
-    lineClamp: true,
-    containerQueries: true,
-  },
   paths: {
     root: "./",
     src: {

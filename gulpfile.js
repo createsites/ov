@@ -6,21 +6,23 @@
 */
 
 const { src, dest, task, watch, series, parallel } = require("gulp");
-const clean = require("gulp-clean"), // For Cleaning build/src for fresh export
-    options = require("./config"), // paths and other options from config.js
+const options = require("./config"), // paths and other options from config.js
+    clean = require("gulp-clean"), // For Cleaning build/src for fresh export
     browserSync = require("browser-sync").create(),
-
     sass = require("gulp-sass")(require("sass")), //For Compiling SASS files
     concat = require("gulp-concat"), // For Concatenating js,css files
     uglify = require("gulp-terser"), // To Minify JS files
     imagemin = require("gulp-imagemin"), // To Optimize Images
     cleanCSS = require("gulp-clean-css"), // To Minify CSS files
-    purgecss = require("gulp-purgecss"), // Remove Unused CSS from Styles
-    logSymbols = require("log-symbols"), // For Symbolic Console logs :) :P
+    purgeCss = require("gulp-purgecss"), // Remove Unused CSS from Styles
+    logSymbols = require("log-symbols"), // For Symbolic Console logs
     includePartials = require("gulp-file-include"), // For supporting partials if required
     rename = require('gulp-rename'),
-    replace = require('gulp-replace');
+    replace = require('gulp-replace'),
+    gcmq = require('gulp-group-css-media-queries'),
+    autoprefixer = require('gulp-autoprefixer');
 
+// метка времени для добавления к именам файлов
 let timestamp;
 
 //Load Previews on Browser on dev
@@ -52,14 +54,14 @@ function genTimestamp(done) {
 function devHTML() {
     return src(`${options.paths.src.base}/**/*.html`)
         .pipe(includePartials())
-        .pipe(replace('<!TIMESTAMP!>', ''))
         .pipe(dest(options.paths.dist.base));
 }
 
 function devStyles() {
     return src(`${options.paths.src.css}/**/*.scss`)
         .pipe(sass().on("error", sass.logError))
-        .pipe(dest(options.paths.src.css))
+        .pipe(gcmq())
+        .pipe(autoprefixer())
         .pipe(concat({ path: "style.css" }))
         .pipe(rename({extname: '.min.css'}))
         .pipe(dest(options.paths.dist.css));
@@ -67,10 +69,10 @@ function devStyles() {
 
 function devScripts() {
     return src([
-        `${options.paths.src.js}/libs/**/*.js`,
-        `${options.paths.src.js}/**/*.js`,
-        `!${options.paths.src.js}/**/external/*`,
-    ])
+            `${options.paths.src.js}/libs/**/*.js`,
+            `${options.paths.src.js}/**/*.js`,
+            `!${options.paths.src.js}/**/external/*`,
+        ])
         .pipe(concat({ path: "scripts.js" }))
         .pipe(dest(options.paths.dist.js));
 }
@@ -112,19 +114,20 @@ function prodHTML() {
             `!${options.paths.src.base}/partials/*`
         ])
         .pipe(includePartials())
-        .pipe(replace('<!TIMESTAMP!>', '-' + timestamp))
+        .pipe(replace(/style.min.css/g, 'style-' + timestamp + '.min.css'))
         .pipe(dest(options.paths.build.base));
 }
 
 function prodStyles() {
     return src(`${options.paths.dist.css}/**/*`)
+        .pipe(gcmq())
+        .pipe(autoprefixer())
         .pipe(
-            purgecss({
+            purgeCss({
                 content: ["src/**/*.{html,js,php}"],
                 defaultExtractor: (content) => {
                     const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [];
-                    const innerMatches =
-                        content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || [];
+                    const innerMatches = content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || [];
                     return broadMatches.concat(innerMatches);
                 },
             })
