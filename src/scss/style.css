@@ -1,0 +1,4 @@
+.photo_box {
+  background: rgb(162, 239, 255);
+  background: linear-gradient(90deg, rgb(162, 239, 255) 0%, rgb(65, 197, 255) 100%);
+}
