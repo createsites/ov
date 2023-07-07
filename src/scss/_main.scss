@@ -63,6 +63,8 @@ ul {
 
         &:before {
             content: '\2B50';
+            // medal \1F3C5
+            // winner cup \1F3C6
             border: 1px;
             display: inline-block;
             text-align: center;
@@ -176,59 +178,15 @@ main {
 
             .teacher {
                 flex-basis: 25%;
-                position: relative;
-
-                img {
-                    position: absolute;
-                    top: 0;
-                    right: -40px;
-                }
+                align-self: center;
             }
     }
 
-    section.about {
-        img {
-        }
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 600px));
+        grid-gap: 1em;
 
-        .text {
-            p {
-            }
-
-            p {
-            }
-
-            p {
-            }
-        }
-    }
-
-    section.advantages {
-
-        .certificates {
-            a {
-                img {
-                }
-            }
-
-            a {
-                img {
-                }
-            }
-
-            a {
-                img {
-                }
-            }
-        }
-    }
-
-    section.prices {
-    }
-
-    section.reviews {
-    }
-
-    section.contact {
     }
 }
 
