@@ -35,32 +35,34 @@ const path = {
     clean: "./" + out_folder + "/"
 }
 
-const {src, dest} = require('gulp');
-const gulp = require('gulp');
-const fs = require('fs');
+import gulp from 'gulp';
+import fs from 'fs';
 
-const browserSyncPlugin = require('browser-sync').create();
-const fileIncludePlugin = require('gulp-file-include');
-const delPlugin = require('del');
-const renamePlugin = require('gulp-rename');
-const scssPlugin = require('gulp-sass')(require('sass'));
-const autoprefixerPlugin = require('gulp-autoprefixer');
-const groupMediaPlugin = require('gulp-group-css-media-queries');
-const cleanCssPlugin = require('gulp-clean-css');
-const uglifyPlugin = require('gulp-uglify-es').default;
-const imageminPlugin = require('gulp-imagemin');
-const webpPlugin = require('gulp-webp');
-const webpHtmlPlugin = require('gulp-webp-html'); // формирует код для изображений webp в html файлах
-const webpCssPlugin = require('gulp-webpcss'); // формирует код для изображений webp в css файлах
-const svgSpritePlugin = require('gulp-svg-sprite');
-const ttf2woff = require('gulp-ttf2woff'); // для преобразования шрифтов ttf -> woff
-const ttf2woffTwoPlugin = require('gulp-ttf2woff2'); // для преобразования шрифтов ttf -> woff2
-const fonterPlugin = require('gulp-fonter'); // для преобразования шрифтов otf -> ttf
-const verNumberPlugin = require('gulp-version-number'); // для добавления версии к css и js файлам, чтобы сбрасывать кеш при ребилде
-const newerPlugin = require('gulp-newer'); // проверяет обновился ли файл, чтобы не ребилдить постоянно (применяем для картинок)
+import browserSyncPlugin from 'browser-sync';
+import fileIncludePlugin from 'gulp-file-include';
+import del from 'del';
+import renamePlugin from 'gulp-rename';
+import dartSass from 'sass';
+import gulpSass from 'gulp-sass';
+const scssPlugin = gulpSass(dartSass);
+import autoprefixerPlugin from 'gulp-autoprefixer';
+import groupMediaPlugin from 'gulp-group-css-media-queries';
+import cleanCssPlugin from 'gulp-clean-css';
+import uglifyPlugin from 'gulp-uglify-es';
+import imageminPlugin from 'gulp-imagemin';
+import webpPlugin from 'gulp-webp';
+import webpHtmlPlugin from 'gulp-webp-html'; // формирует код для изображений webp в html файлах
+import webpCssPlugin from 'gulp-webpcss'; // формирует код для изображений webp в css файлах
+import svgSpritePlugin from 'gulp-svg-sprite';
+import ttf2woff from 'gulp-ttf2woff'; // для преобразования шрифтов ttf -> woff
+import ttf2woffTwoPlugin from 'gulp-ttf2woff2'; // для преобразования шрифтов ttf -> woff2
+import fonterPlugin from 'gulp-fonter'; // для преобразования шрифтов otf -> ttf
+import verNumberPlugin from 'gulp-version-number'; // для добавления версии к css и js файлам, чтобы сбрасывать кеш при ребилде
+import newerPlugin from 'gulp-newer'; // проверяет обновился ли файл, чтобы не ребилдить постоянно (применяем для картинок)
+import webpack from "webpack-stream";
 
 // browser sync
-function bs() {
+function server() {
     browserSyncPlugin.init({
         server: {
             baseDir: "./" + out_folder + "/"
@@ -70,7 +72,7 @@ function bs() {
 }
 
 function html() {
-    return src(path.src.html)
+    return gulp.src(path.src.html)
         // сборка html файла с инклудами
         .pipe(fileIncludePlugin())
         // оборачиваем <img> в обертку с webp изображением
@@ -84,7 +86,7 @@ function html() {
                 to: ["css", "js"]
             }
         }))
-        .pipe(dest(path.out.html))
+        .pipe(gulp.dest(path.out.html))
         .pipe(browserSyncPlugin.stream());
 }
 
@@ -95,7 +97,7 @@ function css() {
         fs.writeFile(fontsScssFile, '', () => {});
     }
 
-    return src(path.src.css, { sourcemaps: true })
+    return gulp.src(path.src.css, { sourcemaps: true })
         .pipe(scssPlugin({
             outputStyle: "expanded"
         }))
@@ -114,32 +116,32 @@ function css() {
             cascade: true
         }))
         // можно сохранить копию css файла до сжатия еси требуется
-        .pipe(dest(path.out.css))
+        .pipe(gulp.dest(path.out.css))
         // сжимаем
         .pipe(cleanCssPlugin())
         // и сохраняем как *.min.css
         .pipe(renamePlugin({
             extname: ".min.css"
         }))
-        .pipe(dest(path.out.css))
+        .pipe(gulp.dest(path.out.css))
         .pipe(browserSyncPlugin.stream());
 }
 
 function images() {
     // svg обрабатываем отдельно от изображений - просто копируем
-    src(path.src.svg)
-        .pipe(dest(path.out.svg));
+    gulp.src(path.src.svg)
+        .pipe(gulp.dest(path.out.svg));
     // обработка остальных изображений
-    return src(path.src.img)
+    return gulp.src(path.src.img)
         // обрабатываем только изменившиеся изображения
         .pipe(newerPlugin(path.out.img))
         // сначала создаем webp вариант всех картинок и сохраняем
         .pipe(webpPlugin({
             quality: 70
         }))
-        .pipe(dest(path.out.img))
+        .pipe(gulp.dest(path.out.img))
         // далее опять идем в папку с изображениями и проходим их повторно, сжимая и копируя в dist
-        .pipe(src(path.src.img))
+        .pipe(gulp.src(path.src.img))
         // обрабатываем только изменившиеся изображения
         .pipe(newerPlugin(path.out.img))
         // уменьшение размера изображения
@@ -149,33 +151,46 @@ function images() {
             interlaced: true,
             optimizationLevel: 3 // возможные значения from 0 to 7
         }))
-        .pipe(dest(path.out.img))
+        .pipe(gulp.dest(path.out.img))
         .pipe(browserSyncPlugin.stream());
 }
 
 function js() {
-    return src(path.src.js)
-        .pipe(fileIncludePlugin())
-        .pipe(dest(path.out.js))
+    return gulp.src(path.src.js)
+        /*.pipe(fileIncludePlugin())
+        .pipe(gulp.dest(path.out.js))
         // минификация
         .pipe(uglifyPlugin())
         .pipe(renamePlugin({
             extname: ".min.js"
         }))
-        .pipe(dest(path.out.js))
+        .pipe(gulp.dest(path.out.js))*/
+        .pipe(webpack({
+            mode: 'development',
+            output: {
+                filename: "main.min.js"
+            },
+            module: {
+                rules: [
+                    { test: /\.js$|jsx/ },
+                    { test: /\.css$/, use: 'css-loader' },
+                ]
+            }
+        }))
+        .pipe(gulp.dest(path.out.js))
         .pipe(browserSyncPlugin.stream());
 }
 
 // конвертиция шрифтов ttf -> woff и woff2
 function makeWoff() {
     // woff
-    src(path.src.fonts)
+    gulp.src(path.src.fonts)
         .pipe(ttf2woff())
-        .pipe(dest(path.out.fonts));
+        .pipe(gulp.dest(path.out.fonts));
     // woff2
-    return src(path.src.fonts)
+    return gulp.src(path.src.fonts)
         .pipe(ttf2woffTwoPlugin())
-        .pipe(dest(path.out.fonts));
+        .pipe(gulp.dest(path.out.fonts));
 }
 
 function watchFiles() {
@@ -188,7 +203,7 @@ function watchFiles() {
 }
 
 function clean() {
-    return delPlugin(path.clean);
+    return del(path.clean);
 }
 
 
@@ -201,7 +216,7 @@ function clean() {
 // }
 // и теперь ее можно также запускать: npm run svg_sprite
 function svgSprite() {
-    return src(src_folder + "/svg_sprite/*.svg")
+    return gulp.src(src_folder + "/svg_sprite/*.svg")
         .pipe(svgSpritePlugin({
             mode: {
                 // подходящие mode для генерации - symbol и css
@@ -213,18 +228,18 @@ function svgSprite() {
                 }
             }
         }))
-        .pipe(dest(src_folder + "/img"));
+        .pipe(gulp.dest(src_folder + "/img"));
 }
 
 // в основном будет работа с шрифтами ttf, но если вдруг понадобится otf
 // нужно будет сначала сконвертить его в ttf, запустив этот таск вручную
 // шрифт сохранится в папке исходников src
 function makeTtf() {
-    return src(src_folder + "/fonts/*.otf")
+    return gulp.src(src_folder + "/fonts/*.otf")
         .pipe(fonterPlugin({
             formats: ['ttf']
         }))
-        .pipe(dest(src_folder + "/fonts"));
+        .pipe(gulp.dest(src_folder + "/fonts"));
 }
 
 // заносит шрифты из папки dist/fonts в файл fontsScssFile, поэтому проект должен быть сбилден
@@ -274,16 +289,15 @@ function fontsStyle(done) {
 
 const buildFonts = gulp.series(makeTtf, makeWoff, fontsStyle);
 const buildCmd = gulp.series(clean, buildFonts, gulp.parallel(html, css, js, images));
-const watchCmd = gulp.series(buildCmd, gulp.parallel(watchFiles, bs));
+const watchCmd = gulp.series(buildCmd, gulp.parallel(watchFiles, server));
 
 /* задачи */
 
 // создает спрайт из svg
-exports.svgSprite = gulp.task('svgSprite', svgSprite);
+gulp.task('svgSprite', svgSprite);
 // конвертирует шрифты и перезаписывает файл _fonts.scss
 // для добавления шрифтов вручную нужно использовать друго файл, например _fonts_ext.scss
-exports.buildFonts = buildFonts;
+gulp.task('buildFonts', buildFonts);
 
-exports.build = buildCmd;
-exports.serve = watchCmd;
-exports.default = watchCmd;
+gulp.task('build', buildCmd)
+gulp.task('default', watchCmd)

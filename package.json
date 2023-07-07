@@ -3,6 +3,7 @@
     "version": "1.0",
     "description": "",
     "main": "src/index.html",
+    "type": "module",
     "devDependencies": {
         "browser-sync": "^2.27.10",
         "del": "^6.0.0",
@@ -35,7 +36,10 @@
         "postcss": "^8.4.21",
         "prettier": "^2.8.4",
         "sass": "^1.58.1",
-        "webp-converter": "2.2.3"
+        "webp-converter": "2.2.3",
+        "webpack": "^5.88.1",
+        "webpack-stream": "^7.0.0",
+        "@fancyapps/ui": "^5.0.20"
     },
     "scripts": {
         "dev": "gulp",
