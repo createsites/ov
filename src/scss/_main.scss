@@ -19,7 +19,7 @@ p {
 ol {
     counter-reset: myCounter;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 600px));
+    grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5em;
     margin-top: 2.5em;
 
@@ -50,7 +50,7 @@ ol {
 
 ul {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 600px));
+    grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5em;
     margin-top: 2.5em;
 
@@ -100,18 +100,22 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 4rem;
+    padding: 1em 0 4rem 0;
 
     .logo {
         display: flex;
         align-items: center;
 
         img {
-
+            width: 80px;
         }
 
         span {
             display: block;
+            line-height: .9em;
+            text-align: center;
+            color: $blue;
+            margin-left: 1em;
         }
     }
 
@@ -146,87 +150,103 @@ main {
         background: linear-gradient(90deg, $sky-gradient-left 0%, $sky-gradient-right 100%);
         padding: 2rem 4rem;
         display: flex;
+        gap: 2em;
         margin-bottom: 3rem;
 
-            .text {
-                flex-basis: 75%;
+        .text {
+            flex-basis: 75%;
 
-                h1 {
-                    color: #3C6A7BFF;
-                    font-size: 1.2em;
-                    line-height: 1.2em;
+            h1 {
+                color: #3C6A7BFF;
+                font-size: 1.2em;
+                line-height: 1.2em;
 
-                    strong {
-                        white-space: nowrap;
-                    }
-
-                    .name {
-                        color: $blue;
-                        display: block;
-                        margin-bottom: .8em;
-                    }
+                strong {
+                    white-space: nowrap;
                 }
 
-                .btn {
-                    display: inline-block;
-                }
-
-                p {
-                    margin: 1.5em 0;
+                .name {
+                    color: $blue;
+                    display: block;
+                    margin-bottom: .8em;
                 }
             }
 
-            .teacher {
-                flex-basis: 25%;
-                align-self: center;
+            .btn {
+                display: inline-block;
             }
+
+            p {
+                margin: 1.5em 0;
+            }
+        }
+
+        .teacher {
+            flex-basis: 25%;
+            align-self: center;
+            border-radius: 50%;
+            background-color: $sky-gradient-left;
+            overflow: hidden;
+        }
     }
 
     .gallery {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 600px));
-        grid-gap: 1em;
+        grid-template-columns: repeat(5, 1fr);
+        gap: .5em;
 
+        a {
+            margin: 0 auto;
+        }
+
+        &.cert {
+            grid-template-columns: repeat(4, 1fr);
+        }
     }
 }
 
 footer {
     background: $footer-color;
-    color: $white-text-color;
-    padding: 1rem 0;
+    color: $footer-text-color;
+    padding: 3em 0;
+    font-size: .8em;
 
-    nav.bottom-menu {
-        a {
-        }
+    .container {
+        display: flex;
+        justify-content: space-between;
 
-        a {
-        }
+        nav.bottom-menu {
+            display: flex;
+            gap: .7em;
 
-        a {
-        }
+            a {
+                display: block;
 
-        a {
-        }
-
-        a {
-        }
-    }
-
-    a.bottom-logo {
-        img {
-        }
-    }
-
-    .social {
-        a {
-            padding: .5rem;
-
-            svg {
-                width: 36px;
+                &:hover {
+                    color: lighten($footer-text-color, 30%);
+                }
             }
         }
-    }
 
-    .copyright {
+        .social {
+            display: flex;
+            gap: .7em;
+
+            a {
+                width: 1.5em;
+                height: 1.5em;
+                display: block;
+
+                svg {
+                    fill: $footer-text-color;
+                }
+
+                &:hover {
+                    svg {
+                        fill: lighten($footer-text-color, 30%);
+                    }
+                }
+            }
+        }
     }
 }
