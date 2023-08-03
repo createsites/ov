@@ -1,6 +1,12 @@
 body {
     font-family: $font-main;
     font-size: 24px;
+    @media only screen and (max-width:  $bp_lg) {
+        font-size: 20px;
+    }
+    @media only screen and (max-width:  $bp_md) {
+        font-size: 18px;
+    }
 }
 
 h1, h2, h3 {
@@ -22,6 +28,9 @@ ol {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5em;
     margin-top: 2.5em;
+    @media only screen and (max-width:  $bp_lg) {
+        grid-template-columns: 1fr;
+    }
 
     li {
         list-style: none;
@@ -53,6 +62,9 @@ ul {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5em;
     margin-top: 2.5em;
+    @media only screen and (max-width:  $bp_lg) {
+        grid-template-columns: 1fr;
+    }
 
     li {
         list-style: none;
@@ -80,8 +92,12 @@ ul {
 }
 
 .container {
-    max-width: $bp-large;
+    max-width: $bp_xl;
     margin: 0 auto;
+
+    @media only screen and (max-width:  $bp_lg) {
+        margin: 0 0.5em;
+    }
 }
 
 .btn {
@@ -102,12 +118,19 @@ header {
     align-items: center;
     padding: 1em 0 4rem 0;
 
+    @media only screen and (max-width:  $bp_lg) {
+        flex-direction: column;
+    }
+
     .logo {
         display: flex;
         align-items: center;
+        @media only screen and (max-width:  $bp_lg) {
+            margin-bottom: 1em;
+        }
 
         img {
-            width: 80px;
+            width: 3em;
         }
 
         span {
@@ -121,9 +144,14 @@ header {
 
     nav.top-menu {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
-        gap: 1rem;
+        gap: 1em;
         font-size: 1em;
+        @media only screen and (max-width:  $bp_lg) {
+            justify-content: center;
+            gap: 1.5em;
+        }
 
         a {
             display: block;
@@ -133,6 +161,13 @@ header {
 
             &:hover {
                 color: $blue;
+            }
+
+            &.btn {
+                white-space: nowrap;
+                @media only screen and (max-width:  $bp_lg) {
+
+                }
             }
 
             &.btn:hover {
@@ -148,10 +183,14 @@ main {
         border-radius: 1rem;
         background: $sky-gradient-left;
         background: linear-gradient(90deg, $sky-gradient-left 0%, $sky-gradient-right 100%);
-        padding: 2rem 4rem;
+        padding: 2em 4em;
         display: flex;
         gap: 2em;
         margin-bottom: 3rem;
+        @media only screen and (max-width:  $bp_lg) {
+            padding: 2em 2em;
+            flex-direction: column-reverse;
+        }
 
         .text {
             flex-basis: 75%;
@@ -187,6 +226,9 @@ main {
             border-radius: 50%;
             background-color: $sky-gradient-left;
             overflow: hidden;
+            @media only screen and (max-width:  $bp_lg) {
+                max-width: 60%;
+            }
         }
     }
 
@@ -194,6 +236,9 @@ main {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: .5em;
+        @media only screen and (max-width:  $bp_lg) {
+            grid-template-columns: repeat(3, 1fr);
+        }
 
         a {
             margin: 0 auto;
@@ -201,6 +246,9 @@ main {
 
         &.cert {
             grid-template-columns: repeat(4, 1fr);
+            @media only screen and (max-width:  $bp_lg) {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     }
 
@@ -266,6 +314,9 @@ footer {
         nav.bottom-menu {
             display: flex;
             gap: .7em;
+            @media only screen and (max-width:  $bp_lg) {
+                flex-direction: column;
+            }
 
             a {
                 display: block;
