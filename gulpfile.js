@@ -60,6 +60,7 @@ import fonterPlugin from 'gulp-fonter'; // для преобразования �
 import verNumberPlugin from 'gulp-version-number'; // для добавления версии к css и js файлам, чтобы сбрасывать кеш при ребилде
 import newerPlugin from 'gulp-newer'; // проверяет обновился ли файл, чтобы не ребилдить постоянно (применяем для картинок)
 import webpack from "webpack-stream";
+//import NodePolyfillPlugin from "node-polyfill-webpack-plugin"; // исправляет ошибку webpack при импорте некоторых модулей
 
 // browser sync
 function server() {
@@ -104,7 +105,7 @@ function css() {
         // собирает медиа запросы по всему css файлу, группирует и помещает в конец
         .pipe(groupMediaPlugin())
         // изменяет background-image в css, разбивая его на webp и обычные изображения и классы webp и no-webp
-        // но эти классы придется проставлять дополнительным js скриптом
+        // внимание! эти классы нужно проставлять дополнительным js скриптом
         .pipe(webpCssPlugin({
             webpClass: ".webp",
             noWebpClass: ".no-webp"
@@ -115,7 +116,7 @@ function css() {
             overrideBrowsersList: ["last 5 versions"],
             cascade: true
         }))
-        // можно сохранить копию css файла до сжатия еси требуется
+        // можно сохранить копию css файла до сжатия если требуется
         .pipe(gulp.dest(path.out.css))
         // сжимаем
         .pipe(cleanCssPlugin())
@@ -175,7 +176,10 @@ function js() {
                     { test: /\.js$|jsx/ },
                     { test: /\.css$/, use: 'css-loader' },
                 ]
-            }
+            },
+            /*plugins: [
+                new NodePolyfillPlugin()
+            ]*/
         }))
         .pipe(gulp.dest(path.out.js))
         .pipe(browserSyncPlugin.stream());
