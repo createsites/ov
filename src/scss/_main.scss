@@ -1,10 +1,10 @@
 body {
     font-family: $font-main;
     font-size: 24px;
-    @media only screen and (max-width:  $bp_lg) {
+    @media only screen and (max-width: $bp_lg) {
         font-size: 20px;
     }
-    @media only screen and (max-width:  $bp_md) {
+    @media only screen and (max-width: $bp_md) {
         font-size: 18px;
     }
 }
@@ -28,7 +28,7 @@ ol {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5em;
     margin-top: 2.5em;
-    @media only screen and (max-width:  $bp_lg) {
+    @media only screen and (max-width: $bp_lg) {
         grid-template-columns: 1fr;
     }
 
@@ -62,7 +62,7 @@ ul {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 1.5em;
     margin-top: 2.5em;
-    @media only screen and (max-width:  $bp_lg) {
+    @media only screen and (max-width: $bp_lg) {
         grid-template-columns: 1fr;
     }
 
@@ -95,7 +95,7 @@ ul {
     max-width: $bp_xl;
     margin: 0 auto;
 
-    @media only screen and (max-width:  $bp_lg) {
+    @media only screen and (max-width: $bp_lg) {
         margin: 0 0.5em;
     }
 }
@@ -103,12 +103,51 @@ ul {
 .btn {
     background: $blue;
     color: $white-text-color;
-    border-radius: 1.3rem;
-    padding: .7rem 1.5rem;
+    border-radius: 1.3em;
+    padding: .4em 1em;
     font-family: $font-head;
 
     &:hover {
         background: lighten($blue, 10%);
+    }
+}
+
+.contact {
+    display: flex;
+    gap: .5em;
+
+    .btn {
+        display: flex;
+        align-items: center;
+        gap: .5em;
+
+        span.ico {
+            display: flex;
+            width: 1.5em;
+            height: 1.5em;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        &.whatsapp {
+            background-color: #51e264;
+            color: $text-color;
+
+            &:hover {
+                background: darken(#51e264, 20%);
+                color: $text-color;
+            }
+
+            span.ico {
+                background-image: url(../img/whatsapp.svg);
+            }
+        }
+
+        &.email {
+            span.ico {
+                background-image: url(../img/gmail.svg);
+            }
+        }
     }
 }
 
@@ -118,15 +157,15 @@ header {
     align-items: center;
     padding: 1em 0 4rem 0;
 
-    @media only screen and (max-width:  $bp_lg) {
+    @media only screen and (max-width: $bp_xl) {
         flex-direction: column;
     }
 
     .logo {
         display: flex;
         align-items: center;
-        @media only screen and (max-width:  $bp_lg) {
-            margin-bottom: 1em;
+        @media only screen and (max-width: $bp_xl) {
+            margin-bottom: 2em;
         }
 
         img {
@@ -142,37 +181,50 @@ header {
         }
     }
 
-    nav.top-menu {
+    .top-menu-wrap {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 1em;
-        font-size: 1em;
-        @media only screen and (max-width:  $bp_lg) {
-            justify-content: center;
+        gap: 3em;
+        @media only screen and (max-width: $bp_md) {
+            flex-direction: column;
             gap: 1.5em;
         }
 
-        a {
-            display: block;
-            padding-top: .3rem;
-            padding-bottom: .4rem;
-            border-bottom: 0;
-
-            &:hover {
-                color: $blue;
+        nav.top-menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1em;
+            font-size: 1em;
+            @media only screen and (max-width: $bp_lg) {
+                justify-content: center;
+                gap: 1.5em;
             }
 
-            &.btn {
-                white-space: nowrap;
-                @media only screen and (max-width:  $bp_lg) {
-
-                }
-            }
-
-            &.btn:hover {
+            a {
+                display: block;
+                padding-top: .3rem;
+                padding-bottom: .4rem;
                 border-bottom: 0;
-                color: $white-text-color;
+
+                &:hover {
+                    color: $blue;
+                }
+
+                &.btn {
+                    white-space: nowrap;
+
+                    &.whatsapp {
+                        &:hover {
+                            color: $text-color;
+                        }
+                    }
+                }
+
+                &.btn:hover {
+                    border-bottom: 0;
+                    color: $white-text-color;
+                }
             }
         }
     }
@@ -187,7 +239,7 @@ main {
         display: flex;
         gap: 2em;
         margin-bottom: 3rem;
-        @media only screen and (max-width:  $bp_lg) {
+        @media only screen and (max-width: $bp_lg) {
             padding: 2em 2em;
             flex-direction: column-reverse;
         }
@@ -212,7 +264,8 @@ main {
             }
 
             .btn {
-                display: inline-block;
+                display: flex;
+                float: left;
             }
 
             p {
@@ -226,7 +279,7 @@ main {
             border-radius: 50%;
             background-color: $sky-gradient-left;
             overflow: hidden;
-            @media only screen and (max-width:  $bp_lg) {
+            @media only screen and (max-width: $bp_lg) {
                 max-width: 60%;
             }
         }
@@ -236,7 +289,7 @@ main {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: .5em;
-        @media only screen and (max-width:  $bp_lg) {
+        @media only screen and (max-width: $bp_lg) {
             grid-template-columns: repeat(3, 1fr);
         }
 
@@ -246,7 +299,7 @@ main {
 
         &.cert {
             grid-template-columns: repeat(4, 1fr);
-            @media only screen and (max-width:  $bp_lg) {
+            @media only screen and (max-width: $bp_lg) {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -310,11 +363,20 @@ footer {
     .container {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        @media only screen and (max-width: $bp_lg) {
+            margin: 0 2em;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            padding: 0.3rem 1.2rem;
+        }
 
         nav.bottom-menu {
             display: flex;
             gap: .7em;
-            @media only screen and (max-width:  $bp_lg) {
+            @media only screen and (max-width: $bp_lg) {
                 flex-direction: column;
             }
 
@@ -324,6 +386,12 @@ footer {
                 &:hover {
                     color: lighten($footer-text-color, 30%);
                 }
+            }
+        }
+
+        .contact {
+            @media only screen and (max-width: $bp_sm) {
+                flex-direction: column;
             }
         }
 

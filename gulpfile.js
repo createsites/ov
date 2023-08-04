@@ -30,7 +30,7 @@ const path = {
         html: src_folder + "/**/*.html",
         css: src_folder + "/scss/**/*.scss",
         js: src_folder + "/js/**/*.js",
-        img: src_folder + "/img/**/*.{jpg,png,gif,ico,webp}"
+        img: src_folder + "/img/**/*.{jpg,png,gif,ico,webp,svg}"
     },
     clean: "./" + out_folder + "/"
 }
